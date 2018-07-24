@@ -1,0 +1,283 @@
+<main>
+    <div class="text-left">
+        <h4 class="display-2">bs4-selectbox</h4>
+
+        <p>
+            <strong>bs4-selectbox</strong> is a simple selectbox directive for angularjs with bootstrap 4. Here's
+            what this directive does:
+        </p>
+
+        <ul>
+            <li>Single and multiple selection.</li>
+            <li>Search</li>
+            <li>Simple to use.</li>
+        </ul>
+
+        <p>
+            And what it does not try to do:
+        </p>
+
+        <ul>
+            <li>Support any conceivable use-case and be pixel-perfect. It just uses a standard
+                bootstrap 4 dropdown with a bit of custom css. No javascript to keep things in place.</li>
+            <li>Load data from server. We have a <a href="#perf">performance test</a>,
+                if you are scared of dropping to many elements in the selectbox.</li>
+        </ul>
+
+        <p>
+            This page is the documentation for the library with live examples and code samples.
+        </p>
+
+
+
+
+
+        <h4 class="display-4 mt-5">The data and controller</h4>
+
+        <p>
+        We will use the following controller throughout the page:
+        </p>
+
+        <pre><code class="javascript">class Ctrl {
+    constructor() {
+        this.movies = [
+            {
+                id: 1,
+                title: 'The Matrix',
+                year: 1999,
+                length: 136,
+                genre: 'sci-fi'
+            },
+            {
+                id: 2,
+                title: 'The Green Mile',
+                year: 1999,
+                length: 189,
+                genre: 'drama'
+            },
+            {
+                id: 3,
+                title: 'Mona Lisa Smile',
+                year: 2003,
+                length: 117,
+                genre: 'drama'
+            },
+            {
+                id: 4,
+                title: '500 Days of Summer',
+                year: 2009,
+                length: 189,
+                genre: 'comedy'
+            },
+            {
+                id: 5,
+                title: 'One Day',
+                year: 2011,
+                length:  95,
+                genre: 'romance'
+            },
+        ];
+
+        this.selected = [];
+    }
+}</code></pre>
+
+
+
+
+
+    <h4 class="display-4 mt-5">Basic example</h4>
+
+        <p>
+            To create a selectbox you need to insert the <code>bs4-selectbox</code> directive which requires at least:
+        </p>
+
+        <ul>
+            <li>
+                <code>options</code> - a list of objects representing the available options.
+            </li>
+            <li>
+                <code>model</code> - a list of selected objects.
+            </li>
+            <li>
+                <code>search-attr</code> - a possibly comma separated list of attributes to be used in the search.
+            </li>
+        </ul>
+        
+        <p>(In the following examples ctrl simply refers to the controller)</p>
+
+      <pre><code class="html">&lt;bs4-selectbox options=&quot;ctrl.movies&quot; model=&quot;ctrl.selected&quot; search-attrs=&quot;title&quot;&gt;
+    &lt;span&gt;{{ $parent.item.title }}&lt;/span&gt;
+&lt;/bs4-selectbox&gt;</code></pre>
+
+        <p>Which will result in:</p>
+
+        <bs4-selectbox options="app.movies" model="app.selected1" search-attrs="title">
+          <span>{{ $parent.item.title }}</span>
+        </bs4-selectbox>
+
+        <p class="mt-2">
+          <code>app.selected</code>: {{ app.selected1 }}
+        </p>
+
+
+
+
+
+        <h4 class="display-4 mt-5">A more advance example</h4>
+
+        <p>
+            Here we use a more complex template and more search attributes. The item can be accessed in the template
+            through <code>$parent.item</code>
+        </p>
+
+        <pre><code class="html">&lt;bs4-selectbox options=&quot;ctrl.movies&quot; model=&quot;ctrl.selected&quot;
+    search-attrs=&quot;title,year,genre&quot;&gt;
+    &lt;span&gt;
+        &lt;div class=&quot;font-weight-bold&quot;&gt;{{ $parent.item.title }}&lt;/div&gt;
+        &lt;div class=&quot;d-flex justify-content-between&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+                &lt;span class=&quot;text-muted&quot;&gt;Genre:&lt;/span&gt;
+                {{ $parent.item.genre }}
+            &lt;/span&gt;
+            &lt;span&gt;
+                &lt;span class=&quot;text-muted&quot;&gt;Year:&lt;/span&gt;
+                {{ $parent.item.year }}
+            &lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/span&gt;
+&lt;/bs4-selectbox&gt;</code></pre>
+
+        <p>Try to search for '1999' or 'drama':</p>
+
+        <bs4-selectbox options="app.movies" model="app.selected2" search-attrs="title,year,genre">
+            <span>
+                <div class="font-weight-bold">{{ $parent.item.title }}</div>
+                <div class="d-flex justify-content-between">
+                    <span class="mr-3"><span class="text-muted">Genre:</span> {{ $parent.item.genre }}</span>
+                    <span><span class="text-muted">Year:</span> {{ $parent.item.year }}</span>
+                </div>
+            </span>
+        </bs4-selectbox>
+
+        <p class="mt-2">
+          <code>app.selected</code>: {{ app.selected2 }}
+        </p>
+
+
+
+
+
+        <h4 class="display-4 mt-5">Multiple selection.</h4>
+
+        <p>
+            You can enable multiple selection with <code>multiple="true"</code>.
+            Elements with multiple selection are best kept small.
+        </p>
+
+        <pre><code class="html">&lt;bs4-selectbox options=&quot;ctrl.movies&quot; model=&quot;ctrl.selected&quot;
+    search-attrs=&quot;title,year,genre&quot; multiple=&quot;true&quot;&gt;
+    &lt;span&gt;
+        &lt;span&gt;{{ $parent.item.title }}&lt;/span&gt;
+    &lt;/span&gt;
+&lt;/bs4-selectbox&gt;</code></pre>
+
+        <p>You can also remove with backspace.</p>
+
+        <bs4-selectbox options="app.movies" model="app.selected3"
+            search-attrs="title,year,genre" multiple="true">
+                <span>{{ $parent.item.title }}</span>
+        </bs4-selectbox>
+
+        <p class="mt-2">
+          <code>app.selected</code>: {{ app.selected3 }}
+        </p>
+
+
+
+
+
+        <h4 class="display-4 mt-5">Pre-selection</h4>
+
+        <p>
+            To pre-select elements, you can simply set pass a non-empty model to.
+        </p>
+
+        <pre><code class="javascript">class Ctrl {
+    constructor() {
+        this.movies = [ ... ];
+        this.selected = [this.movies[2], this.movies[4]];
+    }
+}</code></pre>
+
+        <bs4-selectbox options="app.movies" model="app.selected4"
+            search-attrs="title,year,genre" multiple="true">
+                <span>{{ $parent.item.title }}</span>
+        </bs4-selectbox>
+
+        <p class="mt-2">
+          <code>app.selected</code>: {{ app.selected4 }}
+        </p>
+
+        <p>
+            This only works if the objects in <code>model</code> are exactly those of <code>options</code>,
+            copies won't work. To work around this, bs4-selectbox offers a <code>key</code> attribute,
+            to specify the key that needs to be used for the comparison
+        </p>
+
+
+        <pre><code class="javascript">class Ctrl {
+    constructor() {
+        this.movies = [ ... ];
+        this.selected = [[
+            {
+                id: 4,
+                title: '500 Days of Summer',
+            },
+            {
+                id: 5,
+                title: 'One Day',
+            },
+        ];
+    }
+}</code></pre>
+
+        <pre><code class="html">&lt;bs4-selectbox options=&quot;ctrl.movies&quot; model=&quot;ctrl.selected&quot;
+    search-attrs=&quot;title,year,genre&quot; multiple=&quot;true&quot; key=&quot;id&quot;&gt;
+    &lt;span&gt;
+        &lt;span&gt;{{ $parent.item.title }}&lt;/span&gt;
+    &lt;/span&gt;
+&lt;/bs4-selectbox&gt;</code></pre>
+
+        <bs4-selectbox options="app.movies" model="app.selected5"
+            search-attrs="title,year,genre" multiple="true" key="id">
+                <span>{{ $parent.item.title }}</span>
+        </bs4-selectbox>
+
+        <p class="mt-2">
+          <code>app.selected</code>: {{ app.selected5 }}
+        </p>
+
+
+
+
+
+        <h4 class="display-4 mt-5">Performance</h4>
+        <a name="perf"></a>
+
+        <p>
+            This is a performance test with 1000 elements with 3 search attributes.
+        </p>
+
+        <bs4-selectbox options="app.longTestData" model="app.selected6"
+            search-attrs="title,year,genre" multiple="true">
+                <span>{{ $parent.item.title }}</span>
+        </bs4-selectbox>
+
+        <p></p>
+        <p>As you see, it's not super fast, but it's still pretty usable.</p>
+
+        <div style="height: 16em"></div>
+
+    </div>
+</main>
