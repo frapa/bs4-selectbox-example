@@ -1,5 +1,5 @@
 import angular from 'angular';
-import '../../node_modules/bs4-selectbox/src/bs4-selectbox.directive.js';
+require('bs4-selectbox');
 
 import '../style/app.css';
 
